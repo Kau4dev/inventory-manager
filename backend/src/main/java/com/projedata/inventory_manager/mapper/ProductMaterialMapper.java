@@ -12,4 +12,7 @@ public interface ProductMaterialMapper {
     @Mapping(target = "product", ignore = true)
     @Mapping(target = "material", ignore = true)
     ProductMaterial toEntity(ProductMaterialDTO dto);
+
+    ProductMaterialDTO toDTO(ProductMaterial entity);
+
 }

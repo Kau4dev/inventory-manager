@@ -10,7 +10,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +60,43 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         productRepository.delete(product);
     }
+
+    public List<ProductViewDTO> getProducibleProducts() {
+        List<Product> products = productRepository.findProducibleProducts();
+        return products.stream()
+                .map(productMapper::toViewDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductProductionSuggestionDTO> getProductionSuggestions() {
+        List<Product> products = productRepository.findAllWithMaterials();
+        List<ProductProductionSuggestionDTO> suggestions = new ArrayList<>();
+        BigDecimal totalValue = BigDecimal.ZERO;
+
+        for (Product product : products) {
+            int maxQuantity = Integer.MAX_VALUE;
+            for (ProductMaterial pm : product.getMaterials()) {
+                int possible = pm.getMaterial().getStockQuantity() / pm.getRequiredQuantity();
+                if (possible < maxQuantity) {
+                    maxQuantity = possible;
+                }
+            }
+            if (maxQuantity > 0) {
+                BigDecimal productTotalValue = product.getPrice().multiply(BigDecimal.valueOf(maxQuantity));
+                suggestions.add(new ProductProductionSuggestionDTO(
+                        product.getId(),
+                        product.getName(),
+                        product.getPrice(),
+                        maxQuantity,
+                        productTotalValue
+                ));
+                totalValue = totalValue.add(productTotalValue);
+            }
+        }
+
+        suggestions.sort((a, b) -> b.price().compareTo(a.price()));
+        return suggestions;
+    }
+
 
 }

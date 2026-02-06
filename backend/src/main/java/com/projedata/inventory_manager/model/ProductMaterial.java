@@ -3,7 +3,6 @@ package com.projedata.inventory_manager.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -27,5 +26,5 @@ public class ProductMaterial {
     private RawMaterial material;
 
     @Column(precision = 10, scale = 3)
-    private BigDecimal requiredQuantity;
+    private Integer requiredQuantity;
 }
