@@ -3,6 +3,8 @@ package com.projedata.inventory_manager.controller;
 import com.projedata.inventory_manager.dto.product.ProductCreatedDTO;
 import com.projedata.inventory_manager.dto.product.ProductUpdateDTO;
 import com.projedata.inventory_manager.dto.product.ProductViewDTO;
+import com.projedata.inventory_manager.dto.productMaterial.ProductMaterialDTO;
+import com.projedata.inventory_manager.service.ProductMaterialService;
 import com.projedata.inventory_manager.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductMaterialService productMaterialService;
 
     @PostMapping
     public ResponseEntity<ProductCreatedDTO> createProduct(@RequestBody @Valid ProductCreatedDTO request) {
@@ -45,6 +48,19 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
+        return ResponseEntity.status(204).build();
+    }
+
+
+    @PostMapping("/{productId}/materials")
+    public ResponseEntity<Void> addMaterialToProduct(@PathVariable Long productId, @RequestBody @Valid ProductMaterialDTO request) {
+        productMaterialService.addMaterialToProduct(productId, request);
+        return ResponseEntity.status(204).build();
+    }
+
+    @DeleteMapping("/{productId}/materials/{materialId}")
+    public ResponseEntity<Void> removeMaterialFromProduct(@PathVariable Long productId, @PathVariable Long materialId) {
+        productMaterialService.removeMaterialFromProduct(productId, materialId);
         return ResponseEntity.status(204).build();
     }
 }
