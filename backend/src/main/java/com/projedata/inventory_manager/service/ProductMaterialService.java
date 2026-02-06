@@ -1,6 +1,7 @@
 package com.projedata.inventory_manager.service;
 
 import com.projedata.inventory_manager.dto.productMaterial.ProductMaterialDTO;
+import com.projedata.inventory_manager.mapper.ProductMaterialMapper;
 import com.projedata.inventory_manager.model.Product;
 import com.projedata.inventory_manager.model.ProductMaterial;
 import com.projedata.inventory_manager.model.RawMaterial;
@@ -19,6 +20,7 @@ public class ProductMaterialService {
     private final ProductRepository productRepository;
     private final RawMaterialRepository rawMaterialRepository;
     private final ProductMaterialRepository productMaterialRepository;
+    private final ProductMaterialMapper productMaterialMapper;
 
     @Transactional
     public void addMaterialToProduct(Long productId, ProductMaterialDTO dto) {
@@ -28,12 +30,14 @@ public class ProductMaterialService {
         RawMaterial material = rawMaterialRepository.findById(dto.materialId())
                 .orElseThrow(() -> new EntityNotFoundException("Material not found"));
 
-        ProductMaterial association = new ProductMaterial();
+        ProductMaterial association = productMaterialMapper.toEntity(dto);
         association.setProduct(product);
         association.setMaterial(material);
-        association.setRequiredQuantity(dto.requiredQuantity());
+
+        product.getMaterials().add(association);
 
         productMaterialRepository.save(association);
+        productRepository.save(product);
     }
 
     @Transactional
@@ -41,6 +45,9 @@ public class ProductMaterialService {
         ProductMaterial association = productMaterialRepository.findByProduct_IdAndMaterial_Id(productId, materialId)
                 .orElseThrow(() -> new EntityNotFoundException("Association not found"));
 
+        association.getProduct().getMaterials().remove(association);
+
         productMaterialRepository.delete(association);
+        productRepository.save(association.getProduct());
     }
 }
