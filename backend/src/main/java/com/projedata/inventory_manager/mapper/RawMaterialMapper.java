@@ -9,7 +9,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
-public interface RawProductMapper {
+public interface RawMaterialMapper {
 
     RawMaterial toEntity(ProductCreatedDTO productCreatedDTO);
 

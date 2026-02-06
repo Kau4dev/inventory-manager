@@ -1,11 +1,11 @@
-package com.projedata.inventory_manager.dto.rawProduct;
+package com.projedata.inventory_manager.dto.rawMaterial;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 
-public record RawProductCreatedDTO(
+public record RawMaterialCreatedDTO(
 
         @NotBlank(message = "Name cannot be blank")
         String name,
