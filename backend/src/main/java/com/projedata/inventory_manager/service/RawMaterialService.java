@@ -3,9 +3,9 @@ package com.projedata.inventory_manager.service;
 import com.projedata.inventory_manager.mapper.RawMaterialMapper;
 import com.projedata.inventory_manager.repository.RawMaterialRepository;
 import com.projedata.inventory_manager.model.RawMaterial;
-import com.projedata.inventory_manager.dto.product.ProductCreatedDTO;
-import com.projedata.inventory_manager.dto.product.ProductViewDTO;
-import com.projedata.inventory_manager.dto.product.ProductUpdateDTO;
+import com.projedata.inventory_manager.dto.rawMaterial.RawMaterialCreatedDTO;
+import com.projedata.inventory_manager.dto.rawMaterial.RawMaterialViewDTO;
+import com.projedata.inventory_manager.dto.rawMaterial.RawMaterialUpdateDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,19 +20,19 @@ public class RawMaterialService {
     private final RawMaterialMapper rawMaterialMapper;
 
     @Transactional
-    public ProductCreatedDTO createProduct(ProductCreatedDTO rawMaterialCreatedDTO) {
+    public RawMaterialCreatedDTO createRawMaterial(RawMaterialCreatedDTO rawMaterialCreatedDTO) {
         RawMaterial rawMaterial = rawMaterialMapper.toEntity(rawMaterialCreatedDTO);
         RawMaterial saved = rawMaterialRepository.save(rawMaterial);
         return rawMaterialMapper.toCreatedDTO(saved);
     }
 
-    public ProductViewDTO getProductById(Long id) {
+    public RawMaterialViewDTO getRawMaterialById(Long id) {
         RawMaterial rawMaterial = rawMaterialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Raw Material not found"));
         return rawMaterialMapper.toViewDTO(rawMaterial);
     }
 
-    public List<ProductViewDTO> getAllProducts() {
+    public List<RawMaterialViewDTO> getAllRawMaterials() {
         List<RawMaterial> rawMaterials = rawMaterialRepository.findAll();
         return rawMaterials.stream()
                 .map(rawMaterialMapper::toViewDTO)
@@ -41,7 +41,7 @@ public class RawMaterialService {
     }
 
     @Transactional
-    public ProductUpdateDTO updateProduct(Long id, ProductUpdateDTO rawMaterialUpdateDTO) {
+    public RawMaterialUpdateDTO updateRawMaterial(Long id, RawMaterialUpdateDTO rawMaterialUpdateDTO) {
         RawMaterial existingRawMaterial = rawMaterialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Raw Material not found"));
 
@@ -52,7 +52,7 @@ public class RawMaterialService {
     }
 
     @Transactional
-    public void deleteProduct(Long id) {
+    public void deleteRawMaterial(Long id) {
         RawMaterial rawMaterial = rawMaterialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Raw Material not found"));
         rawMaterialRepository.delete(rawMaterial);
