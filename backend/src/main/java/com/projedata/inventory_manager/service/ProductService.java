@@ -1,10 +1,13 @@
 package com.projedata.inventory_manager.service;
 
 import com.projedata.inventory_manager.dto.product.ProductCreatedDTO;
+import com.projedata.inventory_manager.dto.product.ProductProductionSuggestionDTO;
 import com.projedata.inventory_manager.dto.product.ProductUpdateDTO;
 import com.projedata.inventory_manager.dto.product.ProductViewDTO;
+import com.projedata.inventory_manager.exception.ResourceNotFoundException;
 import com.projedata.inventory_manager.mapper.ProductMapper;
 import com.projedata.inventory_manager.model.Product;
+import com.projedata.inventory_manager.model.ProductMaterial;
 import com.projedata.inventory_manager.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +34,7 @@ public class ProductService {
 
     public ProductViewDTO getProductById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
         return productMapper.toViewDTO(product);
     }
 
@@ -46,7 +49,7 @@ public class ProductService {
     @Transactional
     public ProductUpdateDTO updateProduct(Long id, ProductUpdateDTO productUpdateDTO) {
         Product existingProduct = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
         productMapper.updateFromDto(productUpdateDTO, existingProduct);
 
@@ -57,7 +60,7 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", id));
         productRepository.delete(product);
     }
 

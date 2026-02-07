@@ -6,6 +6,7 @@ import com.projedata.inventory_manager.model.RawMaterial;
 import com.projedata.inventory_manager.dto.rawMaterial.RawMaterialCreatedDTO;
 import com.projedata.inventory_manager.dto.rawMaterial.RawMaterialViewDTO;
 import com.projedata.inventory_manager.dto.rawMaterial.RawMaterialUpdateDTO;
+import com.projedata.inventory_manager.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class RawMaterialService {
 
     public RawMaterialViewDTO getRawMaterialById(Long id) {
         RawMaterial rawMaterial = rawMaterialRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Raw Material not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Raw Material", id));
         return rawMaterialMapper.toViewDTO(rawMaterial);
     }
 
@@ -43,7 +44,7 @@ public class RawMaterialService {
     @Transactional
     public RawMaterialUpdateDTO updateRawMaterial(Long id, RawMaterialUpdateDTO rawMaterialUpdateDTO) {
         RawMaterial existingRawMaterial = rawMaterialRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Raw Material not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Raw Material", id));
 
         rawMaterialMapper.updateFromDto(rawMaterialUpdateDTO, existingRawMaterial);
 
@@ -54,7 +55,7 @@ public class RawMaterialService {
     @Transactional
     public void deleteRawMaterial(Long id) {
         RawMaterial rawMaterial = rawMaterialRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Raw Material not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Raw Material", id));
         rawMaterialRepository.delete(rawMaterial);
     }
 

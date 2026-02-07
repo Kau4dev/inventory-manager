@@ -1,6 +1,8 @@
 package com.projedata.inventory_manager.service;
 
 import com.projedata.inventory_manager.dto.productMaterial.ProductMaterialDTO;
+import com.projedata.inventory_manager.exception.DuplicateResourceException;
+import com.projedata.inventory_manager.exception.ResourceNotFoundException;
 import com.projedata.inventory_manager.mapper.ProductMaterialMapper;
 import com.projedata.inventory_manager.model.Product;
 import com.projedata.inventory_manager.model.ProductMaterial;
@@ -8,7 +10,6 @@ import com.projedata.inventory_manager.model.RawMaterial;
 import com.projedata.inventory_manager.repository.ProductRepository;
 import com.projedata.inventory_manager.repository.ProductMaterialRepository;
 import com.projedata.inventory_manager.repository.RawMaterialRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,10 +26,20 @@ public class ProductMaterialService {
     @Transactional
     public void addMaterialToProduct(Long productId, ProductMaterialDTO dto) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", productId));
 
         RawMaterial material = rawMaterialRepository.findById(dto.materialId())
-                .orElseThrow(() -> new EntityNotFoundException("Material not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Raw Material", dto.materialId()));
+
+        boolean materialAlreadyExists = product.getMaterials().stream()
+                .anyMatch(pm -> pm.getMaterial().getId().equals(dto.materialId()));
+
+        if (materialAlreadyExists) {
+            throw new DuplicateResourceException(
+                    "Material ID %d is already associated with Product ID %d"
+                            .formatted(dto.materialId(), productId)
+            );
+        }
 
         ProductMaterial association = productMaterialMapper.toEntity(dto);
         association.setProduct(product);
@@ -43,7 +54,8 @@ public class ProductMaterialService {
     @Transactional
     public void removeMaterialFromProduct(Long productId, Long materialId) {
         ProductMaterial association = productMaterialRepository.findByProduct_IdAndMaterial_Id(productId, materialId)
-                .orElseThrow(() -> new EntityNotFoundException("Association not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Association between Product %d and Material %d not found".formatted(productId, materialId)));
 
         association.getProduct().getMaterials().remove(association);
 
