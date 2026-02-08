@@ -74,17 +74,32 @@ public class ProductService {
     public List<ProductProductionSuggestionDTO> getProductionSuggestions() {
         List<Product> products = productRepository.findAllWithMaterials();
         List<ProductProductionSuggestionDTO> suggestions = new ArrayList<>();
-        BigDecimal totalValue = BigDecimal.ZERO;
 
         for (Product product : products) {
+            // Produtos sem materiais não podem ser produzidos
+            if (product.getMaterials() == null || product.getMaterials().isEmpty()) {
+                continue;
+            }
+
             int maxQuantity = Integer.MAX_VALUE;
+
             for (ProductMaterial pm : product.getMaterials()) {
+                // Verifica se a quantidade requerida é válida
+                if (pm.getRequiredQuantity() == null || pm.getRequiredQuantity() <= 0) {
+                    maxQuantity = 0;
+                    break;
+                }
+
+                // Calcula quantos produtos podem ser feitos com este material
                 int possible = pm.getMaterial().getStockQuantity() / pm.getRequiredQuantity();
+
                 if (possible < maxQuantity) {
                     maxQuantity = possible;
                 }
             }
-            if (maxQuantity > 0) {
+
+            // Só adiciona se puder produzir pelo menos 1 unidade
+            if (maxQuantity > 0 && maxQuantity != Integer.MAX_VALUE) {
                 BigDecimal productTotalValue = product.getPrice().multiply(BigDecimal.valueOf(maxQuantity));
                 suggestions.add(new ProductProductionSuggestionDTO(
                         product.getId(),
@@ -93,10 +108,10 @@ public class ProductService {
                         maxQuantity,
                         productTotalValue
                 ));
-                totalValue = totalValue.add(productTotalValue);
             }
         }
 
+        // Ordena por preço decrescente
         suggestions.sort((a, b) -> b.price().compareTo(a.price()));
         return suggestions;
     }

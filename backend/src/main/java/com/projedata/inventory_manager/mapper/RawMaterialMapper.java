@@ -4,8 +4,10 @@ import com.projedata.inventory_manager.dto.rawMaterial.RawMaterialCreatedDTO;
 import com.projedata.inventory_manager.dto.rawMaterial.RawMaterialUpdateDTO;
 import com.projedata.inventory_manager.dto.rawMaterial.RawMaterialViewDTO;
 import com.projedata.inventory_manager.model.RawMaterial;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -19,5 +21,6 @@ public interface RawMaterialMapper {
 
     RawMaterialUpdateDTO toUpdateDTO(RawMaterial rawMaterial);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(RawMaterialUpdateDTO dto, @MappingTarget RawMaterial entity);
 }
