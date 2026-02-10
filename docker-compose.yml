@@ -17,11 +17,46 @@ services:
       retries: 5
     restart: unless-stopped
     networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: inventory-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/inventory_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+    container_name: inventory-frontend
+    ports:
+      - "5173:80"
+    depends_on:
       - backend
+    restart: unless-stopped
+    networks:
+      - app-network
 
 volumes:
   db-data:
 
 networks:
-  backend:
+  app-network:
     driver: bridge
