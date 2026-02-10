@@ -172,14 +172,12 @@ class ProductServiceTest {
 
     @Test
     void getProductionSuggestions_Success() {
-        // Setup raw material
         RawMaterial material = RawMaterial.builder()
                 .id(1L)
                 .name("Material A")
                 .stockQuantity(100)
                 .build();
 
-        // Setup product material
         ProductMaterial productMaterial = ProductMaterial.builder()
                 .id(1L)
                 .material(material)
@@ -207,7 +205,6 @@ class ProductServiceTest {
 
     @Test
     void getProductionSuggestions_MultipleProducts_SortedByPrice() {
-        // Setup first product (cheaper)
         RawMaterial material1 = RawMaterial.builder()
                 .id(1L)
                 .name("Material A")
@@ -223,7 +220,6 @@ class ProductServiceTest {
 
         product.setMaterials(List.of(productMaterial1));
 
-        // Setup second product (more expensive)
         Product product2 = Product.builder()
                 .id(2L)
                 .name("Expensive Product")
@@ -253,7 +249,6 @@ class ProductServiceTest {
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        // Should be sorted by price descending
         assertEquals("Expensive Product", result.get(0).name());
         assertEquals(BigDecimal.valueOf(500.00), result.get(0).price());
         assertEquals("Test Product", result.get(1).name());
@@ -263,7 +258,6 @@ class ProductServiceTest {
 
     @Test
     void getProductionSuggestions_InsufficientMaterials() {
-        // Setup raw material with insufficient stock
         RawMaterial material = RawMaterial.builder()
                 .id(1L)
                 .name("Material A")
@@ -285,13 +279,12 @@ class ProductServiceTest {
         List<ProductProductionSuggestionDTO> result = productService.getProductionSuggestions();
 
         assertNotNull(result);
-        assertEquals(0, result.size()); // No products can be produced
+        assertEquals(0, result.size());
         verify(productRepository, times(1)).findAllWithMaterials();
     }
 
     @Test
     void getProductionSuggestions_MultipleMaterials_LimitedBySmallestStock() {
-        // Setup multiple materials with different stock levels
         RawMaterial material1 = RawMaterial.builder()
                 .id(1L)
                 .name("Material A")
@@ -328,7 +321,6 @@ class ProductServiceTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         ProductProductionSuggestionDTO suggestion = result.getFirst();
-        // Limited by material2: 25/5 = 5 (not 100/10 = 10)
         assertEquals(5, suggestion.maxQuantity());
         assertEquals(BigDecimal.valueOf(500.00), suggestion.totalValue());
         verify(productRepository, times(1)).findAllWithMaterials();
@@ -389,7 +381,7 @@ class ProductServiceTest {
         List<ProductProductionSuggestionDTO> result = productService.getProductionSuggestions();
 
         assertNotNull(result);
-        assertEquals(0, result.size()); // Não deve incluir produtos sem materiais
+        assertEquals(0, result.size());
         verify(productRepository, times(1)).findAllWithMaterials();
     }
 
@@ -404,7 +396,7 @@ class ProductServiceTest {
         ProductMaterial productMaterial = ProductMaterial.builder()
                 .id(1L)
                 .material(material)
-                .requiredQuantity(0) // Quantidade inválida
+                .requiredQuantity(0)
                 .product(product)
                 .build();
 
@@ -415,7 +407,7 @@ class ProductServiceTest {
         List<ProductProductionSuggestionDTO> result = productService.getProductionSuggestions();
 
         assertNotNull(result);
-        assertEquals(0, result.size()); // Não deve incluir se quantidade requerida for 0
+        assertEquals(0, result.size());
         verify(productRepository, times(1)).findAllWithMaterials();
     }
 }

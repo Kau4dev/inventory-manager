@@ -76,7 +76,6 @@ public class ProductService {
         List<ProductProductionSuggestionDTO> suggestions = new ArrayList<>();
 
         for (Product product : products) {
-            // Produtos sem materiais não podem ser produzidos
             if (product.getMaterials() == null || product.getMaterials().isEmpty()) {
                 continue;
             }
@@ -84,13 +83,11 @@ public class ProductService {
             int maxQuantity = Integer.MAX_VALUE;
 
             for (ProductMaterial pm : product.getMaterials()) {
-                // Verifica se a quantidade requerida é válida
                 if (pm.getRequiredQuantity() == null || pm.getRequiredQuantity() <= 0) {
                     maxQuantity = 0;
                     break;
                 }
 
-                // Calcula quantos produtos podem ser feitos com este material
                 int possible = pm.getMaterial().getStockQuantity() / pm.getRequiredQuantity();
 
                 if (possible < maxQuantity) {
@@ -98,7 +95,6 @@ public class ProductService {
                 }
             }
 
-            // Só adiciona se puder produzir pelo menos 1 unidade
             if (maxQuantity > 0 && maxQuantity != Integer.MAX_VALUE) {
                 BigDecimal productTotalValue = product.getPrice().multiply(BigDecimal.valueOf(maxQuantity));
                 suggestions.add(new ProductProductionSuggestionDTO(
@@ -111,7 +107,6 @@ public class ProductService {
             }
         }
 
-        // Ordena por preço decrescente
         suggestions.sort((a, b) -> b.price().compareTo(a.price()));
         return suggestions;
     }

@@ -116,7 +116,6 @@ class ProductMaterialServiceTest {
 
     @Test
     void addMaterialToProduct_DuplicateMaterial() {
-        // Adiciona um material existente ao produto
         ProductMaterial existingMaterial = ProductMaterial.builder()
                 .id(2L)
                 .product(product)
