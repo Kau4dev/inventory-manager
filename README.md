@@ -25,6 +25,7 @@ The **Industrial Inventory Manager** is a full-stack web application that empowe
 ### ✨ What Makes This Special
 
 This application implements an **intelligent production optimization algorithm** that:
+
 - Analyzes current raw material stock levels
 - Calculates all possible products that can be manufactured
 - Prioritizes production by highest value products first
@@ -48,30 +49,30 @@ This project follows a **modern microservices architecture** with clear separati
 
 ### 🔧 Backend Stack
 
-| Component | Technology | Version |
-|-----------|-----------|---------|
-| **Framework** | Spring Boot | 3.5.9 |
-| **Language** | Java | 21 (LTS) |
-| **Database** | PostgreSQL | 16 |
-| **ORM** | Spring Data JPA + Hibernate | 6.6 |
-| **Object Mapping** | MapStruct | Latest |
-| **API Documentation** | Swagger/OpenAPI | 3.0 |
-| **Build Tool** | Maven | 3.9 |
-| **Testing** | JUnit 5 + Mockito | Latest |
+| Component             | Technology                  | Version  |
+| --------------------- | --------------------------- | -------- |
+| **Framework**         | Spring Boot                 | 3.5.9    |
+| **Language**          | Java                        | 21 (LTS) |
+| **Database**          | PostgreSQL                  | 16       |
+| **ORM**               | Spring Data JPA + Hibernate | 6.6      |
+| **Object Mapping**    | MapStruct                   | Latest   |
+| **API Documentation** | Swagger/OpenAPI             | 3.0      |
+| **Build Tool**        | Maven                       | 3.9      |
+| **Testing**           | JUnit 5 + Mockito           | Latest   |
 
 ### 🎨 Frontend Stack
 
-| Component | Technology | Version |
-|-----------|-----------|---------|
-| **Framework** | React | 19.2 |
-| **Language** | TypeScript | 5.6 |
-| **State Management** | Redux Toolkit | 2.11 |
-| **Build Tool** | Vite | 7.0 |
-| **Styling** | Tailwind CSS | 4.0 |
-| **UI Components** | Custom Component Library | - |
-| **Icons** | Lucide React | 0.563 |
-| **HTTP Client** | Axios | 1.13 |
-| **Routing** | React Router | 7.13 |
+| Component            | Technology               | Version |
+| -------------------- | ------------------------ | ------- |
+| **Framework**        | React                    | 19.2    |
+| **Language**         | TypeScript               | 5.6     |
+| **State Management** | Redux Toolkit            | 2.11    |
+| **Build Tool**       | Vite                     | 7.0     |
+| **Styling**          | Tailwind CSS             | 4.0     |
+| **UI Components**    | Custom Component Library | -       |
+| **Icons**            | Lucide React             | 0.563   |
+| **HTTP Client**      | Axios                    | 1.13    |
+| **Routing**          | React Router             | 7.13    |
 
 ### 🐳 Infrastructure
 
@@ -115,6 +116,7 @@ docker-compose down
 ```
 
 **Access Points:**
+
 - 🌐 **Frontend Application**: http://localhost:5173
 - 🔌 **Backend API**: http://localhost:8080
 - 📚 **API Documentation**: http://localhost:8080/swagger-ui/index.html
@@ -158,6 +160,7 @@ mvn spring-boot:run
 The backend will start on **http://localhost:8080**
 
 **Backend Features:**
+
 - 🔄 Spring DevTools for hot-reload
 - 📊 Swagger UI at `/swagger-ui/index.html`
 - 🔍 H2 Console (if enabled) at `/h2-console`
@@ -179,6 +182,7 @@ npm run dev
 The frontend will start on **http://localhost:5173**
 
 **Frontend Features:**
+
 - ⚡ Vite HMR (Hot Module Replacement)
 - 🎨 Tailwind CSS with JIT compilation
 - 🔍 React DevTools compatible
@@ -234,10 +238,11 @@ If ports are already occupied, modify `docker-compose.yml`:
 
 ```yaml
 ports:
-  - "5173:80"    # Change 5173 to another port
-  - "8080:8080"  # Change 8080 to another port
-  - "5436:5432"  # Change 5436 to another port
+  - "5173:80" # Change 5173 to another port
+  - "8080:8080" # Change 8080 to another port
+  - "5436:5432" # Change 5436 to another port
 ```
+
 </details>
 
 <details>
@@ -251,12 +256,14 @@ docker-compose logs db
 ```
 
 Check `application.properties` for correct credentials.
+
 </details>
 
 <details>
 <summary><b>Frontend Can't Connect to Backend</b></summary>
 
 Verify CORS configuration in `CorsConfig.java` and ensure backend is running on port 8080.
+
 </details>
 
 ## 📚 API Documentation
@@ -269,15 +276,16 @@ The backend exposes a RESTful API following industry standards with comprehensiv
 
 Manage raw material inventory and stock levels.
 
-| Method | Endpoint | Description | Request Body |
-|--------|----------|-------------|--------------|
-| `GET` | `/api/rawMaterials` | List all raw materials | - |
-| `GET` | `/api/rawMaterials/{id}` | Get specific raw material | - |
-| `POST` | `/api/rawMaterials` | Create new raw material | `RawMaterialRequestDTO` |
-| `PUT` | `/api/rawMaterials/{id}` | Update raw material | `RawMaterialRequestDTO` |
-| `DELETE` | `/api/rawMaterials/{id}` | Delete raw material | - |
+| Method   | Endpoint                 | Description               | Request Body            |
+| -------- | ------------------------ | ------------------------- | ----------------------- |
+| `GET`    | `/api/rawMaterials`      | List all raw materials    | -                       |
+| `GET`    | `/api/rawMaterials/{id}` | Get specific raw material | -                       |
+| `POST`   | `/api/rawMaterials`      | Create new raw material   | `RawMaterialRequestDTO` |
+| `PUT`    | `/api/rawMaterials/{id}` | Update raw material       | `RawMaterialRequestDTO` |
+| `DELETE` | `/api/rawMaterials/{id}` | Delete raw material       | -                       |
 
 **Example Request** - Create Raw Material:
+
 ```json
 POST /api/rawMaterials
 {
@@ -287,6 +295,7 @@ POST /api/rawMaterials
 ```
 
 **Example Response**:
+
 ```json
 {
   "id": 1,
@@ -301,17 +310,18 @@ POST /api/rawMaterials
 
 Manage product catalog, pricing, and material associations.
 
-| Method | Endpoint | Description | Request Body |
-|--------|----------|-------------|--------------|
-| `GET` | `/api/products` | List all products | - |
-| `GET` | `/api/products/{id}` | Get specific product with materials | - |
-| `POST` | `/api/products` | Create new product | `ProductRequestDTO` |
-| `PUT` | `/api/products/{id}` | Update product | `ProductRequestDTO` |
-| `DELETE` | `/api/products/{id}` | Delete product | - |
-| `GET` | `/api/products/producible` | Get producible products list | - |
-| `GET` | `/api/products/production-suggestions` | Get optimized production plan | - |
+| Method   | Endpoint                               | Description                         | Request Body        |
+| -------- | -------------------------------------- | ----------------------------------- | ------------------- |
+| `GET`    | `/api/products`                        | List all products                   | -                   |
+| `GET`    | `/api/products/{id}`                   | Get specific product with materials | -                   |
+| `POST`   | `/api/products`                        | Create new product                  | `ProductRequestDTO` |
+| `PUT`    | `/api/products/{id}`                   | Update product                      | `ProductRequestDTO` |
+| `DELETE` | `/api/products/{id}`                   | Delete product                      | -                   |
+| `GET`    | `/api/products/producible`             | Get producible products list        | -                   |
+| `GET`    | `/api/products/production-suggestions` | Get optimized production plan       | -                   |
 
 **Example Request** - Create Product with Materials:
+
 ```json
 POST /api/products
 {
@@ -331,23 +341,29 @@ POST /api/products
 ```
 
 **Example Response**:
+
 ```json
 {
   "id": 1,
   "name": "Industrial Chair",
-  "price": 150.00,
+  "price": 150.0,
   "materials": [
     {
+      "id": 1,
       "materialId": 1,
       "materialName": "Steel Sheet",
-      "requiredQuantity": 2
+      "requiredQuantity": 2,
+      "stockQuantity": 50
     },
     {
+      "id": 2,
       "materialId": 2,
       "materialName": "Wood Plank",
-      "requiredQuantity": 4
+      "requiredQuantity": 4,
+      "stockQuantity": 100
     }
-  ]
+  ],
+  "producible": true
 }
 ```
 
@@ -356,26 +372,44 @@ POST /api/products
 ### 🤖 Production Planning Endpoints
 
 #### Get Producible Products
+
 ```
 GET /api/products/producible
 ```
 
-Returns all products that can be manufactured with current stock levels.
+Returns all products that can be manufactured with current stock levels. Each product includes the `producible` field set to `true` and shows current material stock availability.
 
 **Response**:
+
 ```json
 [
   {
     "id": 1,
     "name": "Industrial Chair",
-    "price": 150.00,
-    "maxQuantity": 10,
-    "totalValue": 1500.00
+    "price": 150.0,
+    "materials": [
+      {
+        "id": 1,
+        "materialId": 1,
+        "materialName": "Steel Sheet",
+        "requiredQuantity": 2,
+        "stockQuantity": 50
+      },
+      {
+        "id": 2,
+        "materialId": 2,
+        "materialName": "Wood Plank",
+        "requiredQuantity": 4,
+        "stockQuantity": 100
+      }
+    ],
+    "producible": true
   }
 ]
 ```
 
 #### Get Production Suggestions
+
 ```
 GET /api/products/production-suggestions
 ```
@@ -383,6 +417,7 @@ GET /api/products/production-suggestions
 Returns **optimized production plan** prioritized by product value. This endpoint implements the core algorithm that maximizes revenue while respecting material constraints.
 
 **Algorithm Features**:
+
 - ✅ Prioritizes high-value products
 - ✅ Handles shared materials across products
 - ✅ Prevents over-allocation of stock
@@ -390,21 +425,22 @@ Returns **optimized production plan** prioritized by product value. This endpoin
 - ✅ Provides total revenue forecast
 
 **Response**:
+
 ```json
 [
   {
     "id": 2,
     "name": "Premium Desk",
-    "price": 450.00,
+    "price": 450.0,
     "maxQuantity": 5,
-    "totalValue": 2250.00
+    "totalValue": 2250.0
   },
   {
     "id": 1,
     "name": "Industrial Chair",
-    "price": 150.00,
+    "price": 150.0,
     "maxQuantity": 8,
-    "totalValue": 1200.00
+    "totalValue": 1200.0
   }
 ]
 ```
@@ -415,12 +451,13 @@ Returns **optimized production plan** prioritized by product value. This endpoin
 
 Manage many-to-many relationships between products and materials.
 
-| Method | Endpoint | Description | Request Body |
-|--------|----------|-------------|--------------|
-| `POST` | `/api/products/{productId}/materials` | Add material to product | `ProductMaterialRequestDTO` |
-| `DELETE` | `/api/products/{productId}/materials/{materialId}` | Remove material from product | - |
+| Method   | Endpoint                                           | Description                  | Request Body                |
+| -------- | -------------------------------------------------- | ---------------------------- | --------------------------- |
+| `POST`   | `/api/products/{productId}/materials`              | Add material to product      | `ProductMaterialRequestDTO` |
+| `DELETE` | `/api/products/{productId}/materials/{materialId}` | Remove material from product | -                           |
 
 **Example Request** - Add Material to Product:
+
 ```json
 POST /api/products/1/materials
 {
@@ -446,6 +483,7 @@ All endpoints follow consistent error response format:
 ```
 
 **Common HTTP Status Codes**:
+
 - `200 OK` - Successful GET/PUT request
 - `201 Created` - Successful POST request
 - `204 No Content` - Successful DELETE request
@@ -461,6 +499,7 @@ All endpoints follow consistent error response format:
 Complete lifecycle management for manufacturing materials.
 
 **Capabilities**:
+
 - ✅ Track material inventory with real-time stock quantities
 - ✅ Full CRUD operations (Create, Read, Update, Delete)
 - ✅ Stock level monitoring and alerts
@@ -476,6 +515,7 @@ Complete lifecycle management for manufacturing materials.
 Comprehensive product catalog with material composition tracking.
 
 **Capabilities**:
+
 - ✅ Maintain product catalog with pricing
 - ✅ Associate multiple materials to each product
 - ✅ Define precise required quantities for production
@@ -503,12 +543,14 @@ Comprehensive product catalog with material composition tracking.
 **Key Features**:
 
 #### 📊 Producible Products Analysis
+
 - Scans current inventory against all product recipes
 - Identifies which products **can** be manufactured right now
 - Calculates **maximum quantity** for each producible product
 - Estimates **total revenue** potential per product
 
 #### 💡 Optimized Production Suggestions
+
 - **Profit Maximization**: Prioritizes high-value products first
 - **Smart Material Allocation**: Handles shared materials across multiple products
 - **Conflict Resolution**: Prevents over-allocation of limited resources
@@ -542,12 +584,14 @@ Total Projected Revenue: $2,500
 Real-time business intelligence and operational insights.
 
 **Metrics Displayed**:
+
 - 💰 **Total Production Revenue**: Estimated value from suggested production
 - 📦 **Producible Products**: Count of items that can be manufactured
 - 🔧 **Raw Materials in Stock**: Total material types available
 - 📈 **Production Capacity**: Visual indicators of manufacturing potential
 
 **Interactive Features**:
+
 - Quick navigation to management pages
 - Real-time data updates
 - Responsive design for mobile access
@@ -562,6 +606,7 @@ Real-time business intelligence and operational insights.
 Flexible relationship management between materials and products.
 
 **Features**:
+
 - Many-to-many relationships between products and materials
 - Dynamic quantity adjustments
 - Duplicate prevention mechanisms
@@ -602,11 +647,13 @@ CREATE INDEX idx_raw_material_name ON raw_material(name);
 ```
 
 **Columns**:
+
 - `id`: Auto-incrementing primary key
 - `name`: Unique material identifier (e.g., "Steel Sheet", "Plastic Resin")
 - `stock_quantity`: Current inventory count (must be non-negative)
 
 **Business Rules**:
+
 - Material names must be unique
 - Stock quantity cannot be negative
 - Indexed for fast name lookups
@@ -629,11 +676,13 @@ CREATE INDEX idx_product_price ON product(price DESC);
 ```
 
 **Columns**:
+
 - `id`: Auto-incrementing primary key
 - `name`: Product name (e.g., "Office Chair", "Premium Desk")
 - `price`: Product selling price (2 decimal precision)
 
 **Business Rules**:
+
 - Price must be non-negative
 - Indexed by name for searches
 - Indexed by price descending for optimization algorithm
@@ -658,12 +707,14 @@ CREATE INDEX idx_pm_material ON product_material(raw_material_id);
 ```
 
 **Columns**:
+
 - `id`: Auto-incrementing primary key
 - `product_id`: Foreign key to product table
 - `raw_material_id`: Foreign key to raw_material table
 - `required_quantity`: Amount of material needed to produce one unit
 
 **Business Rules**:
+
 - Composite unique constraint prevents duplicate material assignments
 - Required quantity must be positive
 - Cascading deletes maintain referential integrity
@@ -678,24 +729,24 @@ CREATE INDEX idx_pm_material ON product_material(raw_material_id);
 ✅ **Check Constraints**: Business rule validation at database level  
 ✅ **Indexes**: Optimized for common query patterns  
 ✅ **Cascading Deletes**: Automatic cleanup of dependent records  
-✅ **Connection Pooling**: HikariCP for high-performance connections  
+✅ **Connection Pooling**: HikariCP for high-performance connections
 
 ### Sample Data
 
 ```sql
 -- Raw Materials
-INSERT INTO raw_material (name, stock_quantity) VALUES 
+INSERT INTO raw_material (name, stock_quantity) VALUES
 ('Steel Sheet', 100),
 ('Wood Plank', 200),
 ('Plastic Resin', 50);
 
 -- Products
-INSERT INTO product (name, price) VALUES 
+INSERT INTO product (name, price) VALUES
 ('Office Chair', 150.00),
 ('Premium Desk', 450.00);
 
 -- Product Materials (Bill of Materials)
-INSERT INTO product_material (product_id, raw_material_id, required_quantity) VALUES 
+INSERT INTO product_material (product_id, raw_material_id, required_quantity) VALUES
 (1, 1, 2),  -- Office Chair needs 2 Steel Sheets
 (1, 2, 4),  -- Office Chair needs 4 Wood Planks
 (2, 1, 10), -- Premium Desk needs 10 Steel Sheets

@@ -53,7 +53,7 @@ class ProductServiceTest {
                 .build();
 
         productCreatedDTO = new ProductCreatedDTO("Test Product", BigDecimal.valueOf(100.00));
-        productViewDTO = new ProductViewDTO(1L, "Test Product", BigDecimal.valueOf(100.00), new ArrayList<>());
+        productViewDTO = new ProductViewDTO(1L, "Test Product", BigDecimal.valueOf(100.00), new ArrayList<>(), false);
         productUpdateDTO = new ProductUpdateDTO("Updated Product", BigDecimal.valueOf(150.00));
     }
 

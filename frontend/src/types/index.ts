@@ -16,7 +16,7 @@ export interface ProductMaterial {
   materialId: number;
   materialName: string;
   requiredQuantity: number;
-  unitPrice: number;
+  stockQuantity: number;
 }
 
 export interface Product {
