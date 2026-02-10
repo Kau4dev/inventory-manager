@@ -41,18 +41,16 @@ const DashboardPage = () => {
   };
 
   const totalInventoryValue = rawMaterials.reduce(
-    (acc: number, material: RawMaterial) => acc + material.quantity,
+    (acc: number, material: RawMaterial) => acc + material.stockQuantity,
     0,
   );
 
-  const lowStockMaterials = rawMaterials.filter(
-    (m: RawMaterial) => m.quantity <= m.minimumStock,
-  );
+  const producibleProducts = products.filter((p) => p.producible);
 
   const columns: TableColumn<ProductionSuggestion>[] = [
     {
       header: "Product",
-      accessor: "productName",
+      accessor: "name",
       render: (value: string) => (
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
@@ -64,7 +62,7 @@ const DashboardPage = () => {
     },
     {
       header: "Suggested Qty",
-      accessor: "suggestedQuantity",
+      accessor: "maxQuantity",
       render: (value: number) => (
         <div className="flex items-center gap-2">
           <span className="font-semibold text-blue-600">{value}</span>
@@ -74,14 +72,14 @@ const DashboardPage = () => {
     },
     {
       header: "Unit Profit",
-      accessor: "profitPerUnit",
+      accessor: "price",
       render: (value: number) => (
         <span className="text-gray-700">{formatCurrency(value)}</span>
       ),
     },
     {
       header: "Total Profit",
-      accessor: "totalProfit",
+      accessor: "totalValue",
       render: (value: number) => (
         <span className="font-semibold text-green-600">
           {formatCurrency(value)}
@@ -125,9 +123,9 @@ const DashboardPage = () => {
           color="green"
         />
         <StatCard
-          title="Products in Catalog"
-          value={products.length}
-          icon={Package}
+          title="Producible Products"
+          value={producibleProducts.length}
+          icon={Factory}
           color="purple"
         />
         <StatCard
@@ -143,24 +141,6 @@ const DashboardPage = () => {
           color="indigo"
         />
       </div>
-
-      {/* Low Stock Alert */}
-      {lowStockMaterials.length > 0 && (
-        <Card className="border-l-4 border-l-yellow-500 bg-yellow-50">
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-yellow-100 flex items-center justify-center flex-shrink-0">
-              <Boxes className="w-5 h-5 text-yellow-600" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-yellow-800">Low Stock Alert</h3>
-              <p className="text-yellow-700 text-sm mt-1">
-                {lowStockMaterials.length} material(s) with low stock:{" "}
-                {lowStockMaterials.map((m: RawMaterial) => m.name).join(", ")}
-              </p>
-            </div>
-          </div>
-        </Card>
-      )}
 
       {/* Production Suggestions */}
       <Card padding={false}>

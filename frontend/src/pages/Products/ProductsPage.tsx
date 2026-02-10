@@ -34,7 +34,6 @@ import type { Product } from "../../types";
 
 interface FormData {
   name: string;
-  description: string;
   price: string;
 }
 
@@ -68,7 +67,6 @@ const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    description: "",
     price: "",
   });
   const [materialForm, setMaterialForm] = useState<MaterialForm>({
@@ -91,12 +89,11 @@ const ProductsPage = () => {
       setSelectedProduct(product);
       setFormData({
         name: product.name,
-        description: product.description || "",
         price: product.price.toString(),
       });
     } else {
       setSelectedProduct(null);
-      setFormData({ name: "", description: "", price: "" });
+      setFormData({ name: "", price: "" });
     }
     setErrors({});
     setIsModalOpen(true);
@@ -105,7 +102,7 @@ const ProductsPage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedProduct(null);
-    setFormData({ name: "", description: "", price: "" });
+    setFormData({ name: "", price: "" });
     setErrors({});
   };
 
@@ -139,7 +136,6 @@ const ProductsPage = () => {
 
     const data = {
       name: formData.name.trim(),
-      description: formData.description.trim(),
       price: parseFloat(formData.price),
     };
 
@@ -427,14 +423,6 @@ const ProductsPage = () => {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             error={errors.name}
             required
-          />
-          <Input
-            label="Description"
-            placeholder="Enter product description"
-            value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
           />
           <Input
             label="Price"

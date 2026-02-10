@@ -13,16 +13,12 @@ import type { RawMaterial } from "../../types";
 
 interface FormData {
   name: string;
-  quantity: string;
-  unitPrice: string;
-  minimumStock: string;
+  stockQuantity: string;
 }
 
 interface FormErrors {
   name?: string;
-  quantity?: string;
-  unitPrice?: string;
-  minimumStock?: string;
+  stockQuantity?: string;
 }
 
 interface StockStatus {
@@ -51,9 +47,7 @@ const RawMaterialsPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    quantity: "",
-    unitPrice: "",
-    minimumStock: "",
+    stockQuantity: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -65,9 +59,10 @@ const RawMaterialsPage = () => {
     material.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const getStockStatus = (quantity: number): StockStatus => {
-    if (quantity === 0) return { variant: "danger", label: "Out of Stock" };
-    if (quantity <= 10) return { variant: "warning", label: "Low Stock" };
+  const getStockStatus = (stockQuantity: number): StockStatus => {
+    if (stockQuantity === 0)
+      return { variant: "danger", label: "Out of Stock" };
+    if (stockQuantity <= 10) return { variant: "warning", label: "Low Stock" };
     return { variant: "success", label: "In Stock" };
   };
 
@@ -76,13 +71,11 @@ const RawMaterialsPage = () => {
       setSelectedMaterial(material);
       setFormData({
         name: material.name,
-        quantity: material.quantity.toString(),
-        unitPrice: material.unitPrice.toString(),
-        minimumStock: material.minimumStock.toString(),
+        stockQuantity: material.stockQuantity.toString(),
       });
     } else {
       setSelectedMaterial(null);
-      setFormData({ name: "", quantity: "", unitPrice: "", minimumStock: "" });
+      setFormData({ name: "", stockQuantity: "" });
     }
     setErrors({});
     setIsModalOpen(true);
@@ -91,7 +84,7 @@ const RawMaterialsPage = () => {
   const handleCloseModal = (): void => {
     setIsModalOpen(false);
     setSelectedMaterial(null);
-    setFormData({ name: "", quantity: "", unitPrice: "", minimumStock: "" });
+    setFormData({ name: "", stockQuantity: "" });
     setErrors({});
   };
 
@@ -100,14 +93,8 @@ const RawMaterialsPage = () => {
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     }
-    if (!formData.quantity || parseInt(formData.quantity) < 0) {
-      newErrors.quantity = "Quantity must be a positive number";
-    }
-    if (!formData.unitPrice || parseFloat(formData.unitPrice) < 0) {
-      newErrors.unitPrice = "Unit price must be a positive number";
-    }
-    if (!formData.minimumStock || parseInt(formData.minimumStock) < 0) {
-      newErrors.minimumStock = "Minimum stock must be a positive number";
+    if (!formData.stockQuantity || parseInt(formData.stockQuantity) < 0) {
+      newErrors.stockQuantity = "Stock quantity must be a positive number";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -121,9 +108,7 @@ const RawMaterialsPage = () => {
 
     const data = {
       name: formData.name.trim(),
-      quantity: parseInt(formData.quantity),
-      unitPrice: parseFloat(formData.unitPrice),
-      minimumStock: parseInt(formData.minimumStock),
+      stockQuantity: parseInt(formData.stockQuantity),
     };
 
     try {
@@ -200,14 +185,14 @@ const RawMaterialsPage = () => {
     },
     {
       header: "Stock Quantity",
-      accessor: "quantity",
+      accessor: "stockQuantity",
       render: (value: number) => (
         <span className="font-semibold text-gray-700">{value} units</span>
       ),
     },
     {
       header: "Status",
-      accessor: "quantity",
+      accessor: "stockQuantity",
       render: (value: number) => {
         const status = getStockStatus(value);
         return <Badge variant={status.variant}>{status.label}</Badge>;
@@ -310,39 +295,14 @@ const RawMaterialsPage = () => {
             required
           />
           <Input
-            label="Quantity"
+            label="Stock Quantity"
             type="number"
-            placeholder="Enter quantity"
-            value={formData.quantity}
+            placeholder="Enter stock quantity"
+            value={formData.stockQuantity}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setFormData({ ...formData, quantity: e.target.value })
+              setFormData({ ...formData, stockQuantity: e.target.value })
             }
-            error={errors.quantity}
-            min="0"
-            required
-          />
-          <Input
-            label="Unit Price"
-            type="number"
-            step="0.01"
-            placeholder="Enter unit price"
-            value={formData.unitPrice}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setFormData({ ...formData, unitPrice: e.target.value })
-            }
-            error={errors.unitPrice}
-            min="0"
-            required
-          />
-          <Input
-            label="Minimum Stock"
-            type="number"
-            placeholder="Enter minimum stock"
-            value={formData.minimumStock}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setFormData({ ...formData, minimumStock: e.target.value })
-            }
-            error={errors.minimumStock}
+            error={errors.stockQuantity}
             min="0"
             required
           />

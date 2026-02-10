@@ -2,16 +2,12 @@
 export interface RawMaterial {
   id: number;
   name: string;
-  quantity: number;
-  unitPrice: number;
-  minimumStock: number;
+  stockQuantity: number;
 }
 
 export interface RawMaterialFormData {
   name: string;
-  quantity: number;
-  unitPrice: number;
-  minimumStock: number;
+  stockQuantity: number;
 }
 
 // Product Types
@@ -26,7 +22,6 @@ export interface ProductMaterial {
 export interface Product {
   id: number;
   name: string;
-  description: string;
   price: number;
   materials: ProductMaterial[];
   producible: boolean;
@@ -35,7 +30,6 @@ export interface Product {
 
 export interface ProductFormData {
   name: string;
-  description: string;
   price: number;
 }
 
@@ -52,13 +46,11 @@ export interface RemoveMaterialFromProductData {
 
 // Production Suggestions Types
 export interface ProductionSuggestion {
-  id?: number;
-  productId: number;
-  productName: string;
+  id: number;
+  name: string;
+  price: number;
   maxQuantity: number;
-  profitPerUnit: number;
-  totalProfit: number;
-  suggestedQuantity: number;
+  totalValue: number;
 }
 
 export interface ProductionSuggestionsResponse {
